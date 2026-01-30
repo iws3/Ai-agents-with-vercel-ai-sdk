@@ -6,7 +6,7 @@
   "scripts": {
     "build":"tsc",
     "start":"node dist/index.js",
-    "stream":"tsc && node dist/2_streaming.js"
+   "chat": "tsc && node dist/3_chat.js"
   },
   "keywords": [],
   "author": "",
