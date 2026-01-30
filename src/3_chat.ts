@@ -1,5 +1,7 @@
 import { generateText } from "ai";
-
+import 'dotenv/config'
+import {google} from "@ai-sdk/google"
+const model=google('gemini-2.5-flash')
 async function chatConversations(): Promise<void> {
     console.log('\n' + '='.repeat(70));
     console.log('PART 3: mULTI-TURN conversation');
@@ -32,7 +34,7 @@ async function chatConversations(): Promise<void> {
         // pass the message array to the generated text- Ai use the full generated context to generate relevant answer
 
         const response=await generateText({
-            model:'gemini-2.5-flash',
+            model:model,
             messages:messages
 
         })
