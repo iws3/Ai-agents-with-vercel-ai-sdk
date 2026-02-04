@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "output": "tsc && node dist/2.0_output_formatting/2.2-basic_structured_output/2_complex_nessted_structure.js"
+    "output": " tsc && nodemon dist/2.0_output_formatting/2.2-basic_structured_output/3_enums_control_values"
   },
   "keywords": [],
   "author": "",
