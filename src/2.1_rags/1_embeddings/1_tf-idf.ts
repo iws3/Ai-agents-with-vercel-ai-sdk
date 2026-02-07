@@ -61,3 +61,6 @@ function buildTFIDFVectorizer(documents: string[]): TFIDFVectorizer {
     documentCount,
   };
 }
+
+
+// CONVERT A SINGLE VECTOR:
