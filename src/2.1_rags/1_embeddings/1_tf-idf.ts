@@ -73,7 +73,7 @@ function documentToTFIDFVector(
   const tokens=tokenize(doc);
   const vocabularySize=vectorizer.vocabulary.size;
 
-  // initialize vector with zeros (one dimension per vocabulary wor
+  // initialize vector with zeros (one dimension per vocabu
   const vector=new Array(vocabularySize).fill(0)
 
 }
