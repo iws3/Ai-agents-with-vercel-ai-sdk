@@ -96,7 +96,25 @@ function documentToTFIDFVector(
   return vector
 }
 
-// function cosine similarity
+// function cosine similarity:
+
+
+/**
+ * Cosine similarity: The core similarity metric for embeddings.
+ * 
+ * Math explanation:
+ * Given two vectors A and B, cosine similarity is:
+ * cos(θ) = (A · B) / (|A| × |B|)
+ * 
+ * Where:
+ * - A · B is the dot product: sum of (A[i] × B[i]) for all i
+ * - |A| is the magnitude: sqrt(sum of A[i]² for all i)
+ * 
+ * Result ranges from -1 to 1:
+ * - 1 means vectors point in exactly the same direction (identical meaning)
+ * - 0 means vectors are perpendicular (unrelated meaning)
+ * - -1 means vectors point in opposite directions (opposite meaning)
+ */
 
 function cosineSimilarity(vectorA:number[], vectorB:number[]):number {
 
@@ -133,4 +151,37 @@ function cosineSimilarity(vectorA:number[], vectorB:number[]):number {
   
   // Final cosine similarity
   return dotProduct / (magnitudeA * magnitudeB);
+}
+
+
+/**
+ * Euclidean distance: Another way to measure similarity.
+ * Unlike cosine similarity, this measures the straight-line distance
+ * between two points in the vector space.
+ * 
+ * Math:
+ * distance = sqrt(sum of (A[i] - B[i])² for all i)
+ * 
+ * Lower values mean more similar (closer together in space).
+ */
+
+function euclideanDistance(vectorA:number[], vectorB:number[]):number{
+  if(vectorA.length!==vectorB.length){
+    throw new Error('Vectors must have the same length');
+  }
+
+  let sumSquareDifference=0;
+  for(let i=0;i<vectorA.length;i++){
+    const difference=vectorA[i]-vectorB[i];
+    sumSquareDifference+=difference*difference;
+  }
+
+  return Math.sqrt(sumSquareDifference)
+}
+
+
+// NOW EXPERIMENTS WITH TF-IDF
+function experimentWithTFIDF(){
+  console.log('\n' + '='.repeat(70));
+
 }
