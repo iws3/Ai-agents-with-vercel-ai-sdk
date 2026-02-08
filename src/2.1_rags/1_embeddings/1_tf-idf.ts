@@ -119,6 +119,18 @@ function cosineSimilarity(vectorA:number[], vectorB:number[]):number {
   magnitudeA=Math.sqrt(magnitudeA);
 
   // calaculate the magnitude of B: |B|
+  let magnitudeB = 0;
+  for (let i = 0; i < vectorB.length; i++) {
+    magnitudeB += vectorB[i] * vectorB[i];
+  }
+  magnitudeB = Math.sqrt(magnitudeB);
+  
 
-  return 3
+// Avoid division by zero
+  if (magnitudeA === 0 || magnitudeB === 0) {
+    return 0;
+  }
+  
+  // Final cosine similarity
+  return dotProduct / (magnitudeA * magnitudeB);
 }
