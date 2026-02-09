@@ -201,7 +201,12 @@ function experimentWithTFIDF(){
   console.log('\n Document Corpus:');
   Dummydocuments.forEach((doc, i)=>{
     console.log(` ${i+1}. "${doc}`)
-  })
+  });
+
+  // build a tf-idf vectorizer
+  console.log('\n Building tf-idf vectorizer...');
+  const vectorizer=buildTFIDFVectorizer(Dummydocuments);
+  console.log(`Vocabulary size: ${vectorizer.vocabulary.size} unique words`)
 
 
 
