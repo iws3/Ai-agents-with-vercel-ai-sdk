@@ -133,7 +133,7 @@ function cosineSimilarity(vectorA:number[], vectorB:number[]):number {
 
   let magnitudeA=0;
   for(let i=0; i<vectorA.length; i++){
-    magnitudeA=vectorA[i] * vectorA[i]
+    magnitudeA+=vectorA[i] * vectorA[i]
   }
   magnitudeA=Math.sqrt(magnitudeA);
 
