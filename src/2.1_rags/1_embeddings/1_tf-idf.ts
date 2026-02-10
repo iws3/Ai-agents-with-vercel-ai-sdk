@@ -200,7 +200,7 @@ function experimentWithTFIDF(){
   ];
   console.log('\n Document Corpus:');
   Dummydocuments.forEach((doc, i)=>{
-    console.log(` ${i+1}. "${doc}`)
+    // console.log(` ${i+1}. "${doc}`)
   });
 
   // build a tf-idf vectorizer
@@ -208,7 +208,26 @@ function experimentWithTFIDF(){
   const vectorizer=buildTFIDFVectorizer(Dummydocuments);
   console.log(`Vocabulary size: ${vectorizer.vocabulary.size} unique words`)
 
+  // EXAMINE SOME WORDS AND THEIR IDF-VALUES:
+  console.log(`\n Simple IDF values (higher=score disitnctive):`);
 
+  const sampleWords=['cat', 'dog', 'the', 'learning', 'machine'];
+  sampleWords.forEach(word=>{
+    const idf=vectorizer.idf.get(word);
+    if(idf!==undefined){
+      console.log(`"${word}": ${idf.toFixed(3)} `);
+    }
+  })
+// CONVERT ALL DOCUMENTS INTO VECTORS
+
+const vectors=Dummydocuments.map(doc=>documentToTFIDFVector(doc, vectorizer));
+
+// lets search! Try a query about cats
+const query="Feline creatures resting on carpets";
+
+console.log(`\n Query: "${query}"`);
+const queryVector=documentToTFIDFVector(query, vectorizer);
+console.log(`document vector is: ${queryVector}`)
 
 }
 
