@@ -63,82 +63,78 @@ function buildTFIDFVectorizer(documents: string[]): TFIDFVectorizer {
   };
 }
 
-
 // CONVERT A SINGLE DOCUMENT INTO A TF-IDF VECTOR
 // the vector will have one dimention for each word in the vocabulary
 
 function documentToTFIDFVector(
-  doc:string,
-  vectorizer:TFIDFVectorizer
-):number[] {
-  const tokens=tokenize(doc);
-  const vocabularySize=vectorizer.vocabulary.size;
+  doc: string,
+  vectorizer: TFIDFVectorizer,
+): number[] {
+  const tokens = tokenize(doc);
+  const vocabularySize = vectorizer.vocabulary.size;
 
   // initialize vector with zeros (one dimensional per vector)
-  const vector=new Array(vocabularySize).fill(0);
+  const vector = new Array(vocabularySize).fill(0);
   // COUNT TERM FREQ IN THE DOCUMENT
 
-  const termFrequency=new Map<string, number>();
-  tokens.forEach(word=>{
+  const termFrequency = new Map<string, number>();
+  tokens.forEach((word) => {
     termFrequency.set(word, (termFrequency.get(word) || 0) + 1);
-  })
+  });
 
   // calculate TF-IDF for each word in the document
-  termFrequency.forEach((count, word)=>{
-    if(vectorizer.vocabulary.has(word)) {
-      const wordIndex=vectorizer.vocabulary.get(word)!;
-      const tf=count/tokens.length;
-      const idf=vectorizer.idf.get(word) || 0;
-      vector[wordIndex]=tf*idf;
+  termFrequency.forEach((count, word) => {
+    if (vectorizer.vocabulary.has(word)) {
+      const wordIndex = vectorizer.vocabulary.get(word)!;
+      const tf = count / tokens.length;
+      const idf = vectorizer.idf.get(word) || 0;
+      vector[wordIndex] = tf * idf;
     }
-  })
+  });
 
-
-  return vector
+  return vector;
 }
 
 // function cosine similarity:
 
-
 /**
  * Cosine similarity: The core similarity metric for embeddings.
- * 
+ *
  * Math explanation:
  * Given two vectors A and B, cosine similarity is:
  * cos(θ) = (A · B) / (|A| × |B|)
- * 
+ *
  * Where:
  * - A · B is the dot product: sum of (A[i] × B[i]) for all i
  * - |A| is the magnitude: sqrt(sum of A[i]² for all i)
- * 
+ *
  * Result ranges from -1 to 1:
  * - 1 means vectors point in exactly the same direction (identical meaning)
  * - 0 means vectors are perpendicular (unrelated meaning)
  * - -1 means vectors point in opposite directions (opposite meaning)
  */
 
-function cosineSimilarity(vectorA:number[], vectorB:number[]):number {
-
-  if(vectorA.length!==vectorB.length) {
-    throw new Error('Vector must have the same length')
+function cosineSimilarity(vectorA: number[], vectorB: number[]): number {
+  if (vectorA.length !== vectorB.length) {
+    throw new Error("Vector must have the same length");
   }
 
   // calculate the dot product : A.B
-  let dotProduct=0;
-  for(let i=0;i<vectorA.length;i++){
-    dotProduct+=vectorA[i]*vectorB[i];
+  let dotProduct = 0;
+  for (let i = 0; i < vectorA.length; i++) {
+    dotProduct += vectorA[i] * vectorB[i];
   }
 
-  console.log( `Dot product of ${vectorA} and ${vectorB} = ${dotProduct}`)
+  console.log(`Dot product of ${vectorA} and ${vectorB} = ${dotProduct}`);
   // calculate the magnitude of A: |A|
 
-  let magnitudeA=0;
-  for(let i=0; i<vectorA.length; i++){
-    magnitudeA+=vectorA[i] * vectorA[i]
+  let magnitudeA = 0;
+  for (let i = 0; i < vectorA.length; i++) {
+    magnitudeA += vectorA[i] * vectorA[i];
   }
-  magnitudeA=Math.sqrt(magnitudeA);
+  magnitudeA = Math.sqrt(magnitudeA);
 
-  console.log(`Magnitude of ${vectorA}= ${magnitudeA}`)
+  console.log(`Magnitude of ${vectorA}= ${magnitudeA}`);
 
   // calaculate the magnitude of B: |B|
   let magnitudeB = 0;
@@ -147,54 +143,51 @@ function cosineSimilarity(vectorA:number[], vectorB:number[]):number {
   }
   magnitudeB = Math.sqrt(magnitudeB);
 
-  console.log(`Magnitude of vectorB is ${vectorB}`)
-  
+  console.log(`Magnitude of vectorB is ${vectorB}`);
 
-// Avoid division by zero
+  // Avoid division by zero
   if (magnitudeA === 0 || magnitudeB === 0) {
     return 0;
   }
-  
+
   // Final cosine similarity
   return dotProduct / (magnitudeA * magnitudeB);
 }
-
 
 /**
  * Euclidean distance: Another way to measure similarity.
  * Unlike cosine similarity, this measures the straight-line distance
  * between two points in the vector space.
- * 
+ *
  * Math:
  * distance = sqrt(sum of (A[i] - B[i])² for all i)
- * 
+ *
  * Lower values mean more similar (closer together in space).
  */
 
-function euclideanDistance(vectorA:number[], vectorB:number[]):number{
-  if(vectorA.length!==vectorB.length){
-    throw new Error('Vectors must have the same length');
+function euclideanDistance(vectorA: number[], vectorB: number[]): number {
+  if (vectorA.length !== vectorB.length) {
+    throw new Error("Vectors must have the same length");
   }
 
-  let sumSquareDifference=0;
-  for(let i=0;i<vectorA.length;i++){
-    const difference=vectorA[i]-vectorB[i];
-    sumSquareDifference+=difference*difference;
+  let sumSquareDifference = 0;
+  for (let i = 0; i < vectorA.length; i++) {
+    const difference = vectorA[i] - vectorB[i];
+    sumSquareDifference += difference * difference;
   }
 
-  return Math.sqrt(sumSquareDifference)
+  return Math.sqrt(sumSquareDifference);
 }
 
-
 // NOW EXPERIMENTS WITH TF-IDF
-function experimentWithTFIDF(){
-  console.log('\n' + '='.repeat(70));
-  console.log('EXPERIMENT1: TF-IDF Embeddings and Similarity Search');
-  console.log('='.repeat(70));
+function experimentWithTFIDF() {
+  console.log("\n" + "=".repeat(70));
+  console.log("EXPERIMENT1: TF-IDF Embeddings and Similarity Search");
+  console.log("=".repeat(70));
 
   // create a small corpus of documents about different topics
 
-   const documents = [
+  const documents = [
     "The cat sat on the mat and purred softly",
     "A dog barked loudly in the park",
     "The feline animal stretched and yawned on the rug",
@@ -203,62 +196,73 @@ function experimentWithTFIDF(){
     "The puppy played with a ball in the garden",
     "Deep learning algorithms require substantial computational power",
   ];
-  console.log('\n Document Corpus:');
-  Dummydocuments.forEach((doc, i)=>{
+  console.log("\n Document Corpus:");
+  Dummydocuments.forEach((doc, i) => {
     // console.log(` ${i+1}. "${doc}`)
   });
 
   // build a tf-idf vectorizer
-  console.log('\n Building tf-idf vectorizer...');
-  const vectorizer=buildTFIDFVectorizer(Dummydocuments);
+  console.log("\n Building tf-idf vectorizer...");
+  const vectorizer = buildTFIDFVectorizer(Dummydocuments);
   console.log(`Vocabulary size: ${vectorizer.vocabulary.size} unique words`);
   console.log(`Vectorizer is: ${JSON.stringify(vectorizer)}`);
-  console.log(`vectorizer idf: ${JSON.stringify(vectorizer.idf)}`)
+  console.log(`vectorizer idf: ${JSON.stringify(vectorizer.idf)}`);
 
   // EXAMINE SOME WORDS AND THEIR IDF-VALUES:
   console.log(`\n Simple IDF values (higher=score disitnctive):`);
 
-  const sampleWords=['cat', 'dog', 'the', 'learning', 'machine'];
-  sampleWords.forEach(word=>{
-    const idf=vectorizer.idf.get(word);
-    if(idf!==undefined){
+  const sampleWords = ["cat", "dog", "the", "learning", "machine"];
+  sampleWords.forEach((word) => {
+    const idf = vectorizer.idf.get(word);
+    if (idf !== undefined) {
       console.log(`"${word}": ${idf.toFixed(3)} `);
     }
-  })
-// CONVERT ALL DOCUMENTS INTO VECTORS
+  });
+  // CONVERT ALL DOCUMENTS INTO VECTORS
 
-const vectors=Dummydocuments.map(doc=>documentToTFIDFVector(doc, vectorizer));
+  const vectors = Dummydocuments.map((doc) =>
+    documentToTFIDFVector(doc, vectorizer),
+  );
 
-// lets search! Try a query about cats
-const query="Feline creatures resting on carpets";
+  // lets search! Try a query about cats
+  const query = "Feline creatures resting on carpets";
 
-console.log(`\n Query: "${query}"`);
-const queryVector=documentToTFIDFVector(query, vectorizer);
-console.log(`document vector is: ${queryVector}`);
-// Calculate similarity between query and each document
+  console.log(`\n Query: "${query}"`);
+  const queryVector = documentToTFIDFVector(query, vectorizer);
+  console.log(`document vector is: ${queryVector}`);
+  // Calculate similarity between query and each document
 
-const similarity=vectors.map((docVector, index)=>({
-  documentIndex:index,
-  document:Dummydocuments[index],
-  cosineSimilarity:cosineSimilarity(queryVector, docVector),
-  euclideanDistance:euclideanDistance(queryVector, docVector),
-}))
+  const similarity = vectors.map((docVector, index) => ({
+    documentIndex: index,
+    document: Dummydocuments[index],
+    cosineSimilarity: cosineSimilarity(queryVector, docVector),
+    euclideanDistance: euclideanDistance(queryVector, docVector),
+  }));
 
-// log the similarity object
+  // log the similarity object
 
-// sort by cosine similarity- highest first
-similarity.sort((a,b)=>b.cosineSimilarity-a.cosineSimilarity)
+  // sort by cosine similarity- highest first
+  similarity.sort((a, b) => b.cosineSimilarity - a.cosineSimilarity);
 
-console.log(`Here is the similarity object: ${JSON.stringify(similarity,null,0)}`);
+  console.log(
+    `Here is the similarity object: ${JSON.stringify(similarity, null, 0)}`,
+  );
 
-console.log('\n SEARCH RESULTS {RANKED BY SIMILARITY}');
-similarity.forEach((result, rank)=>{
-  console.log(`\n Rank ${rank + 1}:`);
-  console.log(`Document: "${result.document}"`);
-  console.log(`Cosine similarity: ${result.cosineSimilarity.toFixed(4)}`);
-  console.log(`Euclidean Distance: ${result.euclideanDistance.toFixed(4)}`);
-})
+  console.log("\n SEARCH RESULTS {RANKED BY SIMILARITY}");
+  similarity.forEach((result, rank) => {
+    console.log(`\n Rank ${rank + 1}:`);
+    console.log(`Document: "${result.document}"`);
+    console.log(`Cosine similarity: ${result.cosineSimilarity.toFixed(4)}`);
+    console.log(`Euclidean Distance: ${result.euclideanDistance.toFixed(4)}`);
+  });
+  // Observations: The documents about cats should rank highest!
 
+  console.log("\n Observation");
+  console.log(' Even though the query uses different words {feline vs "cat"} ');
+  console.log('"Creatures" vs "animal" vs "carpet" vs "mat", document about ');
+  console.log(" Cats rank highest because TF-IDF captures word importance. ");
+  console.log(' However, it still relise on word overlap. "cat" and "feline" ');
+  console.log("Are treated as completely different words!");
 }
 
-experimentWithTFIDF()
+experimentWithTFIDF();
