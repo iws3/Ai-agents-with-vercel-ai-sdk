@@ -6,6 +6,8 @@
  * the overlap ensures both chunks capture some of that concept.
  */
 
+import { sampleTechnicalDoc } from "./sample_docs";
+
 
 interface Chunk {
     text:string;
@@ -39,9 +41,29 @@ function fixedSizeChunking(text:string, chunkSize:number, overlapSize:number):Ch
         // Move forward by (chunksize - overlapp) words
         // This creates the overlapp between consecutive
         currentIndex+=chunkSize-overlapSize;
+        // if we have fewer than chunkSize words remaining
+        // and we've already created at least one chunk, we are done
+        if(currentIndex+chunkSize > words.length && chunks.length >0){
+
+            if(currentIndex < words.length){
+                const finalWords=words.slice(currentIndex);
+                chunks.push({
+                    text:finalWords.join(' '),
+                    startIndex:currentIndex,
+                    endIndex:words.length,
+                    chunkNumber:chunkNumber++,
+                })
+            }
+
+            break;
+        }
 
 
     }
 
-    return {}
+    return chunks
 }
+
+
+const fsc= fixedSizeChunking(sampleTechnicalDoc, 100, 20);
+console.log(`FSD: ${fsc}`);
