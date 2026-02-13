@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "embeddings": "tsc && nodemon dist/2.1_rags/1_embeddings/1_tf-idf.js"
+    "chunking": "tsc && nodemon dist/2.1_rags/2_chunking/1_fixed_size_with_overlapp.js"
   },
   "keywords": [],
   "author": "",

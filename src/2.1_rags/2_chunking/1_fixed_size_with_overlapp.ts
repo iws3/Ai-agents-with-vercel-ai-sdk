@@ -6,7 +6,7 @@
  * the overlap ensures both chunks capture some of that concept.
  */
 
-import { sampleTechnicalDoc } from "./sample_docs";
+import { sampleTechnicalDoc } from "./sample_docs.js";
 
 
 interface Chunk {
@@ -66,4 +66,4 @@ function fixedSizeChunking(text:string, chunkSize:number, overlapSize:number):Ch
 
 
 const fsc= fixedSizeChunking(sampleTechnicalDoc, 100, 20);
-console.log(`FSD: ${fsc}`);
+console.log(`FSD: ${JSON.stringify(fsc)}`);
