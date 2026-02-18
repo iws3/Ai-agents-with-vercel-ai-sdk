@@ -2,6 +2,8 @@
 // CHUNKING STRATEGY 2: SEMANTIC (BY HEADERS/SECTIONS)
 // ============================================================================
 
+import { sampleAPIDoc } from "./sample_docs.js";
+
 /**
  * This strategy splits text based on structural markers like headers.
  * For markdown documents, we split on # headers.
@@ -59,3 +61,10 @@ if(currentSection.length > 0){
 
     return chunks
 }
+
+function main() {
+    const semanticChunks=semanticChunking(sampleAPIDoc);
+    console.log(`sample chunks: ${semanticChunks}`)
+}
+
+main()
