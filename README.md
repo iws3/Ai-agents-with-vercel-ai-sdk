@@ -1,4 +1,6 @@
 # AI ENGINEERING FOR DEVELOPERS - TypeScript Course & Resources
+<img width="747" height="462" alt="image" src="https://github.com/user-attachments/assets/82172c41-e70d-4f1f-9d5b-ccddccd556d9" />
+
 
 A comprehensive, production-ready TypeScript learning platform with AI engineering and frontend development focus.
 
