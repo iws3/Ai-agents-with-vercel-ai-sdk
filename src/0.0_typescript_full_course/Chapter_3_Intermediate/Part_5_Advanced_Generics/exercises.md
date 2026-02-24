@@ -1,13 +1,15 @@
-# Part: [TITLE] ‚Äî Exercises
+# Part 5: Advanced_Generics ‚Äî Exercises
 
 ## Exercise 1 (Beginner)
-[Exercise 1]
+Create a basic implementation following the concepts.
 
 ## Exercise 2 (Intermediate)
-[Exercise 2]
+Extend the basic implementation with advanced features.
 
 ## Challenge (Advanced)
-[Challenge]
+Build a complete solution combining all learned concepts.
 
-## Ì≥ù Submission
-Include code examples and explanations
+## Ì≥ù Tips
+- Test thoroughly
+- Consider edge cases
+- Follow TypeScript best practices
