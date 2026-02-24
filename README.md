@@ -1,4 +1,4 @@
-# Vercel AI SDK - TypeScript Course & Resources
+# AI ENGINEERING FOR DEVELOPERS - TypeScript Course & Resources
 
 A comprehensive, production-ready TypeScript learning platform with AI engineering and frontend development focus.
 
