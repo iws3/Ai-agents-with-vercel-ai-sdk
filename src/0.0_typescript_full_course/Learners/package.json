@@ -6,8 +6,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "start": "node dist/index.js",
-    "test": "node dist/test.js",
+    "start": "npm run build && node dist/solution/gita/chapter_1/exercise.js",
+    "test": "npm run build && node dist/solution/gita/chapter_1/exercise.js",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint src/**/*.ts"
   },
