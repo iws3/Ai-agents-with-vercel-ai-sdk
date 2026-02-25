@@ -1,8 +1,8 @@
-# í³š Contributing to the TypeScript Course
+# ï¿½ï¿½ï¿½ Contributing to the TypeScript Course
 
 Welcome! We're thrilled you want to contribute to this comprehensive TypeScript course. This guide helps you contribute safely and effectively.
 
-## í¾¯ Our Mission
+## ï¿½ï¿½ï¿½ Our Mission
 
 We're building a **professional-grade TypeScript course** where students master both:
 - **Core TypeScript** concepts (Types, Generics, Advanced Patterns)
@@ -12,7 +12,7 @@ The course follows a structured **Chapter â†’ Part** model with deep, research-b
 
 ---
 
-## í¿—ï¸ Course Structure
+## ï¿½ï¿½ï¿½ï¸ Course Structure
 
 ```
 0.0_typescript_full_course/
@@ -57,7 +57,7 @@ The course follows a structured **Chapter â†’ Part** model with deep, research-b
 
 ---
 
-## íº€ How to Contribute
+## ï¿½ï¿½ï¿½ How to Contribute
 
 ### Option 1: Enhance Existing Chapter Content (Priority!)
 
@@ -163,7 +163,7 @@ Build additional learning materials.
 
 ---
 
-## í³‹ Contribution Checklist
+## ï¿½ï¿½ï¿½ Contribution Checklist
 
 Before submitting a PR:
 
@@ -181,11 +181,11 @@ Before submitting a PR:
 
 - [ ] **Structure**
   - [ ] Follows existing file naming (Part_X_Name folder structure)
-  - [ ] Includes í¿·ï¸ Key Terms section
-  - [ ] Includes í¾“ Deep Concepts section
-  - [ ] Includes í²¡ Real-World Applications
+  - [ ] Includes ï¿½ï¿½ï¿½ï¸ Key Terms section
+  - [ ] Includes ï¿½ï¿½ï¿½ Deep Concepts section
+  - [ ] Includes ï¿½ï¿½ï¿½ Real-World Applications
   - [ ] Includes âœ… Checklist
-  - [ ] Includes í³š Resources section
+  - [ ] Includes ï¿½ï¿½ï¿½ Resources section
 
 - [ ] **Git Practices**
   - [ ] One clear, descriptive commit message per contribution
@@ -196,7 +196,7 @@ Before submitting a PR:
 
 ---
 
-## í»Ÿ Workspace Structure for Contributors
+## ï¿½ï¿½ï¿½ Workspace Structure for Contributors
 
 ### Contributing to Course Concepts
 
@@ -268,7 +268,7 @@ git push origin learners/chapter-1-part-1-exercises-alice
 
 ---
 
-## í³ Content Standards
+## ï¿½ï¿½ï¿½ Content Standards
 
 All content should follow these standards:
 
@@ -308,7 +308,7 @@ function validateUserEmail(user: UserData): boolean {
 
 ### 3. Key Terms Formatting
 ```markdown
-## í¿·ï¸ Key Terms
+## ï¿½ï¿½ï¿½ï¸ Key Terms
 
 - **Term**: Short definition
 - **Another Term**: Explanation highlighting what beginners should know
@@ -316,7 +316,7 @@ function validateUserEmail(user: UserData): boolean {
 
 ### 4. Real-World Scenario Format
 ```markdown
-## í²¡ Real-World Applications
+## ï¿½ï¿½ï¿½ Real-World Applications
 
 ### AI Engineering Example: [Scenario Name]
 
@@ -337,7 +337,7 @@ function validateUserEmail(user: UserData): boolean {
 
 ---
 
-## í´„ Pull Request Process
+## ï¿½ï¿½ï¿½ Pull Request Process
 
 1. **Create a branch** with descriptive name
 2. **Make your changes** following the guidelines
@@ -381,7 +381,7 @@ Related to: #15 (Course Content Enhancement)
 
 ---
 
-## í°› Found an Issue?
+## ï¿½ï¿½ï¿½ Found an Issue?
 
 1. **Check if it's already reported** - GitHub Issues
 2. **Create a new issue** with:
@@ -402,22 +402,22 @@ Related to: #15 (Course Content Enhancement)
 
 ---
 
-## í¹ Thank You!
+## ï¿½ï¿½ï¿½ Thank You!
 
 We appreciate every contribution, big or small. Together, we're building the most comprehensive, practical TypeScript course available.
 
-**Happy Learning & Contributing!** íº€
+**Happy Learning & Contributing!** ï¿½ï¿½ï¿½
 
 ---
 
-## í³Š Contribution Stats
+## ï¿½ï¿½ï¿½ Contribution Stats
 
 Here's what successful contributors receive:
 - â­ Credit in README.md and in Part headers  
-- í³ GitHub contribution streak maintenance
-- í¾“ Deep learning by teaching others
-- í±¥ Community recognition
-- í´— Addition to contributor wall
+- ï¿½ï¿½ï¿½ GitHub contribution streak maintenance
+- ï¿½ï¿½ï¿½ Deep learning by teaching others
+- ï¿½ï¿½ï¿½ Community recognition
+- ï¿½ï¿½ï¿½ Addition to contributor wall
 
 ---
 
