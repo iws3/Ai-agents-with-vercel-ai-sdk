@@ -1,46 +1,206 @@
-# Part 9: Building_Libraries (Advanced)
+# Part 9: Building Libraries (Advanced Deep Dive)
 
-## ÌæØ Learning Objectives
-- Master expert-level TypeScript concepts
-- Implement production patterns
-- Build scalable systems with TypeScript
+## Learning Objectives
 
-## Ìø∑Ô∏è Key Terms
-- Advanced patterns and best practices
-- Performance and optimization strategies
+After this part you'll understand:
+- Publishing to npm
+- Semantic versioning
+- Declaration files (.d.ts)
+- Export strategies
+- Breaking changes and migrations
 
-## Ìæì Deep Concepts
+---
 
-### Mastering Advanced Topics
-This part covers enterprise-grade TypeScript patterns for building large-scale applications.
+## Package Setup
 
-```typescript
-// Example code here
+```json
+{
+  "name": "@myorg/mylib",
+  "version": "1.0.0",
+  "description": "Type-safe utilities",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./utils": {
+      "import": "./dist/utils.mjs",
+      "require": "./dist/utils.js",
+      "types": "./dist/utils.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "keywords": ["typescript", "utils"],
+  "repository": "github.com/user/lib"
+}
 ```
 
-### Real-World Applications
-- AI engineering systems
-- Large-scale frontend applications
-- Building TypeScript libraries
-- Performance-critical systems
+---
 
-### Best Practices
-- Follow TypeScript conventions
-- Implement SOLID principles
-- Optimize for maintainability and performance
+## Barrel Exports
 
-## Ì≤° Advanced Patterns
-- Design patterns specific to TypeScript
-- Type-level programming
-- Advanced generic techniques
+```typescript
+// src/index.ts
+export * from "./utils";
+export * from "./types";
+export * from "./helpers";
 
-## Ì≥ö Resources
-- [TypeScript Documentation](https://www.typescriptlang.org/docs)
-- [TypeScript Deep Dive](https://basarat.gitbook.io/typescript/)
-- Industry best practices and case studies
+// Allows: import { helper } from "mylib";
+```
 
-## ‚úÖ Checklist
-- [ ] Understand advanced concepts
-- [ ] Study real-world examples
-- [ ] Implement and practice
-- [ ] Review solutions
+---
+
+## Declaration Files
+
+TypeScript auto-generates .d.ts files:
+
+```json
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "declarationDir": "./dist"
+  }
+}
+```
+
+Generated types allow consumers to get IntelliSense.
+
+---
+
+## Type Exports
+
+```typescript
+// types.ts
+export interface User {
+  id: string;
+  name: string;
+}
+
+export type Status = "active" | "inactive";
+
+// index.ts
+export * from "./types";
+export { default as createUser } from "./create-user";
+```
+
+Consumers get full type information:
+```typescript
+import { User, Status } from "mylib";
+
+const user: User = { id: "1", name: "Alice" };
+```
+
+---
+
+## Semantic Versioning
+
+```
+1.2.3
+‚îÇ ‚îÇ ‚îî‚îÄ Patch (bug fixes)
+‚îÇ ‚îî‚îÄ‚îÄ‚îÄ Minor (new features, backwards compatible)
+‚îî‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ Major (breaking changes)
+```
+
+- v1.0.0 ‚Üí v1.0.1: Bug fixes only
+- v1.0.0 ‚Üí v1.1.0: New features, backwards compatible
+- v1.0.0 ‚Üí v2.0.0: Breaking changes
+
+---
+
+## Breaking Changes
+
+```typescript
+// v1.0.0
+export function processData(data: string): void { }
+
+// v2.0.0 (breaking!)
+export function processData(data: string, options: Options): void { }
+
+// Better: Extend existing type
+interface Options {
+  verbose?: boolean;
+}
+
+export function processData(
+  data: string,
+  options?: Options
+): void { }
+```
+
+---
+
+## Migration Guide
+
+```markdown
+# v2.0.0 Migration Guide
+
+## Breaking Changes
+
+### processData signature changed
+```typescript
+// v1.x
+processData(data);
+
+// v2.x
+processData(data, { verbose: true });
+```
+
+### Removed functions
+- `processDataSync`: Use async version instead
+
+## New Features
+- Added streaming support
+- Type-safe configuration
+```
+
+---
+
+## Testing Library Types
+
+```typescript
+// types.test.ts
+import { expectType, expectAssignable } from "tsd";
+import { User } from "./types";
+
+expectType<string>(({} as User).id);
+expectAssignable<{ id: string }>(({ id: "1" } as User));
+```
+
+Run with:
+```bash
+tsd
+```
+
+---
+
+## Publishing
+
+```bash
+# Build
+npm run build
+
+# Test
+npm test
+
+# Bump version
+npm version minor  # or major, patch
+
+# Publish
+npm publish
+```
+
+---
+
+## Checklist
+
+- [ ] Configure package.json exports
+- [ ] Generate declaration files
+- [ ] Create barrel exports
+- [ ] Use semantic versioning
+- [ ] Document breaking changes
+- [ ] Test library types
+- [ ] Publish to npm
