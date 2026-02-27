@@ -411,7 +411,84 @@ const newNums = [...nums, 4];  // [1, 2, 3, 4]
 
 ---
 
-## 🏆 Best Practices
+## � Labeled Tuples (Modern Pattern)
+
+Named tuple elements make intent crystal clear:
+
+```typescript
+// Without labels - what's x, y, z?
+type Point3D = [number, number, number];
+
+// With labels - crystal clear!
+type Point3DLabeled = [x: number, y: number, z: number];
+
+// With optional labels
+type Coordinate = [latitude: number, longitude: number, altitude?: number];
+
+const coord: Coordinate = [51.5074, -0.1278];      // OK - altitude not required
+const coordFull: Coordinate = [51.5074, -0.1278, 200];  // OK - with altitude
+
+// Function returns are clearer
+function getCoordinate(): [lat: number, lng: number] {
+  return [51.5074, -0.1278];
+}
+
+const [lat, lng] = getCoordinate();  // Clear what each element is
+```
+
+---
+
+## 📊 Arrays vs Tuples: Decision Guide
+
+| Use Case | Array | Tuple |
+|----------|-------|-------|
+| **Homogeneous collection** | ✓ Perfect | Not ideal |
+| **Unknown length** | ✓ Only option | Never |
+| **Fixed-length data** | Wordy | ✓ Perfect |
+| **Return multiple values** | Possible | ✓ Better |
+| **CSV row** | Possible | ✓ Better with labels |
+| **Matrix/Grid** | ✓ Better | Too nested |
+| **Function arguments** | - | ✓ Perfect (spread) |
+| **Flexible shape** | ✓ Yes | No |
+
+### Examples
+
+```typescript
+// ✓ Use Array: List of items (unknown length)
+const shoppingList: string[] = ["apples", "bread", "milk"];
+shoppingList.push("cheese");  // Can add more
+
+// ✓ Use Tuple: Coordinate pair (fixed length, different semantic meaning)
+type Coordinate = [x: number, y: number];
+const point: Coordinate = [10, 20];
+
+// ✓ Use Tuple: Return multiple values
+function divideWithRemainder(a: number, b: number): [quotient: number, remainder: number] {
+  return [Math.floor(a / b), a % b];
+}
+
+const [quotient, remainder] = divideWithRemainder(17, 5);  // [3, 2]
+
+// ✓ Use Array: Homogeneous data
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+}
+
+const products: Product[] = [{ id: 1, name: "Widget", price: 9.99 }];
+
+// Mixed: Array of tuples (good for parsing)
+type CsvRow = [name: string, email: string, age: number];
+const csvData: CsvRow[] = [
+  ["Alice", "alice@example.com", 30],
+  ["Bob", "bob@example.com", 25]
+];
+```
+
+---
+
+## �🏆 Best Practices
 
 1. **Type all arrays** - don't use implicit `any[]`
 2. **Use tuples** for fixed-length data (return values, coordinates)
