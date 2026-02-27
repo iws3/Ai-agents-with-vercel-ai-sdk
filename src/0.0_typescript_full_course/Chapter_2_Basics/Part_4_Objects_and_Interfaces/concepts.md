@@ -563,6 +563,102 @@ interface WeirdInterface {
 
 ---
 
+## 🏛️ Structural Typing Explained
+
+TypeScript uses **structural typing** - types are compatible if they have matching shapes, not just names.
+
+### Structural vs Nominal Typing
+
+```typescript
+// Two different interfaces with the same shape
+interface User {
+  id: number;
+  name: string;
+}
+
+interface Person {
+  id: number;
+  name: string;
+}
+
+// Nominally: User and Person are different types
+// Structurally: They're compatible!
+
+const user: User = { id: 1, name: "Alice" };
+const person: Person = user;  // ✅ OK! Shapes match
+
+// This is the TypeScript way - no explicit declaration needed
+```
+
+### Duck Typing Example
+
+```typescript
+// Functions using structural typing
+function printUser(user: { id: number; name: string }) {
+  console.log(`User: ${user.name}`);
+}
+
+const user = { id: 1, name: "Alice", email: "alice@example.com" };
+printUser(user);  // ✅ OK - user has required properties (extra is fine!)
+
+// This is "duck typing": "If it walks like a duck, quacks like a duck..."
+```
+
+### Extra Properties Are OK
+
+```typescript
+interface Car {
+  make: string;
+  model: string;
+}
+
+const myCar: Car = {
+  make: "Toyota",
+  model: "Camry",
+  year: 2024  // ❌ ERROR: Car doesn't have year property!
+};
+
+// BUT:
+const carData = { make: "Toyota", model: "Camry", year: 2024 };
+const car: Car = carData;  // ✅ OK! Extra properties ignored
+
+// This "excess property checking" prevents typos in literals
+```
+
+### Preventing Unintended Compatibility
+
+Sometimes you want stricter type checking. Use a "discriminator":
+
+```typescript
+// Without discriminator - might accidentally mix!
+interface Admin {
+  name: string;
+  permissions: string[];
+}
+
+interface User {
+  name: string;
+  email: string;
+}
+
+// With discriminator - TypeScript catches mistake
+interface AdminTyped {
+  role: "admin";  // ← Discriminator
+  name: string;
+  permissions: string[];
+}
+
+interface UserTyped {
+  role: "user";   // ← Different discriminator
+  name: string;
+  email: string;
+}
+
+// Now they're not compatible - much safer!
+```
+
+---
+
 ## 📚 Resources
 
 - [TypeScript Handbook: Objects](https://www.typescriptlang.org/docs/handbook/2/objects.html)
