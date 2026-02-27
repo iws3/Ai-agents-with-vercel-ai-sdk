@@ -33,7 +33,7 @@ interface User {
   email: string;
 }
 
-function validateUser(user): boolean {  // TODO: Add proper type
+function validateUser(user: User): boolean {  // TODO: Add proper type
   // TODO: Check that user has id, name, and email
   // TODO: Check that id is a number, name and email are strings
   return true;

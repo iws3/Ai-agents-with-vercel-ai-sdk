@@ -1,8 +1,9 @@
 import { generateText, tool } from "ai";
 import { google } from "@ai-sdk/google";
 import { z } from "zod";
+import "dotenv/config";
 
-const model = google("gemini-2.0-flash-exp");
+const model = google("gemini-2.5-flash");
 
 // Tool 1: Get current weather
 const getWeather = tool({
@@ -81,7 +82,10 @@ async function planEvening() {
       "I want to have dinner in downtown Paris tonight. What restaurants do you recommend, what's the weather like, and how long will it take to get there from the Eiffel Tower?",
   });
 
-  console.log(result.text);
+console.log("loading...");
+  console.log(result.content);
+  console.log(result.response);
+
 }
 
 planEvening().catch(console.error);
