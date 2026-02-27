@@ -161,7 +161,7 @@ const sentence2 = `My name is ${name} and I'm ${age} years old.`;
 
 ### Number Type
 
-Any numeric value (integers and decimals):
+Any numeric value (integers and decimals). Use for ages, prices, counters, measurements, coordinates.
 
 ```typescript
 let age: number = 25;
@@ -176,17 +176,83 @@ age = NaN;            // ✅ OK: NaN is a number
 age = Infinity;       // ✅ OK: Infinity is a number
 ```
 
-**Number operations:**
+**Understanding different number formats:**
+- **Decimal (base 10)**: `42` - standard numbers we use daily
+- **Hexadecimal (base 16)**: `0xFF` - used in colors (#FF0000), memory addresses
+- **Binary (base 2)**: `0b1010` - used in bitwise operations, flags
+- **Octal (base 8)**: `0o755` - used for file permissions in Unix
+
+**Number operations (mathematical):**
 ```typescript
 const x: number = 10;
 const y: number = 3;
 
-console.log(x + y);    // 13
-console.log(x - y);    // 7
-console.log(x * y);    // 30
-console.log(x / y);    // 3.333...
-console.log(x % y);    // 1 (modulo/remainder)
-console.log(x ** y);   // 1000 (exponentiation)
+console.log(x + y);    // 13 (addition)
+console.log(x - y);    // 7 (subtraction)
+console.log(x * y);    // 30 (multiplication)
+console.log(x / y);    // 3.333... (division)
+console.log(x % y);    // 1 (modulo/remainder - useful for checking odds/evens)
+console.log(x ** y);   // 1000 (exponentiation - power)
+```
+
+**Number operations (practical):**
+```typescript
+const price: number = 19.99;
+const tax: number = price * 0.08;
+const total: number = price + tax;
+
+// Rounding
+console.log(total.toFixed(2));    // "27.99" - round to 2 decimal places
+console.log(Math.floor(total));   // 27 - round down
+console.log(Math.ceil(total));    // 28 - round up
+console.log(Math.round(total));   // 28 - round to nearest
+
+// Absolute value
+console.log(Math.abs(-5));        // 5
+
+// Min/Max
+console.log(Math.min(5, 3, 9));   // 3
+console.log(Math.max(5, 3, 9));   // 9
+
+// Random
+console.log(Math.random());       // 0 to 1 (rarely exactly 1)
+```
+
+**Special number values:**
+```typescript
+const infinity: number = Infinity;
+const notANumber: number = NaN;
+
+// Testing for special values
+console.log(isNaN(NaN));              // true
+console.log(isFinite(100));           // true
+console.log(isFinite(Infinity));      // false
+
+// Checking valid numbers
+function isValidNumber(value: number): boolean {
+  return isFinite(value) && !isNaN(value);
+}
+
+isValidNumber(42);          // true
+isValidNumber(Infinity);    // false
+isValidNumber(NaN);         // false
+```
+
+**Memory note:** 
+In JavaScript/TypeScript, all numbers are 64-bit floating-point (IEEE 754). This means:
+- Integers up to 2^53 are exact
+- Decimal precision can be tricky: `0.1 + 0.2 !== 0.3` (it's `0.30000000000000004`)
+- For financial calculations, use libraries like Decimal.js
+
+**Common gotcha - Floating point precision:**
+```typescript
+const result = 0.1 + 0.2;
+console.log(result);        // 0.30000000000000004 (not 0.3!)
+console.log(result === 0.3); // false (!!)
+
+// Solution for financial data: work in integers (cents, not dollars)
+const dollars = 19.99;
+const cents = Math.round(dollars * 100);  // 1999 (no decimals)
 ```
 
 ### Boolean Type
