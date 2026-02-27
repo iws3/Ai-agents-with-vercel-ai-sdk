@@ -415,7 +415,173 @@ function getValue(key: string, multiple?: boolean): string | string[] {
 
 ---
 
-## 🏆 Best Practices
+## � Overloading vs Alternatives
+
+Function overloading is powerful, but often there's a cleaner way:
+
+### Overloading vs Union Types
+
+```typescript
+// With overloading
+function format(value: string): string;
+function format(value: number): string;
+function format(value: boolean): string;
+function format(value: string | number | boolean): string {
+  return `Value: ${value}`;
+}
+
+// With union type (simpler!)
+function format(value: string | number | boolean): string {
+  return `Value: ${value}`;
+}
+
+// Use overloading when return type differs:
+function parse(data: string): string[];      // Parse string -> returns array
+function parse(data: string[]): string;      // Join array -> returns string
+function parse(data: string | string[]): string | string[] {
+  if (typeof data === "string") {
+    return data.split(",");
+  }
+  return data.join(",");
+}
+```
+
+### Overloading vs Generics
+
+```typescript
+// With overloading (verbose)
+function getLength(value: string): number;
+function getLength(value: string[]): number;
+function getLength(value: string | string[]): number {
+  if (typeof value === "string") return value.length;
+  return value.length;
+}
+
+// With generics (cleaner!)
+function getLength<T extends { length: number }>(value: T): number {
+  return value.length;
+}
+
+// Works for any type with length property!
+getLength("hello");           // 5
+getLength([1, 2, 3]);         // 3
+getLength(new Map());         // 0
+```
+
+### Overloading vs Conditional Types
+
+```typescript
+// With overloading
+function getValue(key: string, multiple: true): unknown[];
+function getValue(key: string): unknown;
+function getValue(key: string, multiple?: boolean): unknown | unknown[] {
+  // impl...
+}
+
+// With conditional types (advanced, but cleaner)
+type GetValue<M extends boolean = false> = M extends true ? unknown[] : unknown;
+
+function getValueGeneric<M extends boolean = false>(
+  key: string,
+  multiple?: M
+): GetValue<M> {
+  // impl...
+}
+```
+
+---
+
+## 🔍 Debugging Overload Errors
+
+When TypeScript says your function call doesn't match any overload:
+
+```typescript
+function process(value: string): void;
+function process(value: number): void;
+function process(value: string | number): void {
+  console.log(value);
+}
+
+// ❌ ERROR: Argument of type 'boolean' is not assignable to any overload
+process(true);
+
+// ✓ Debug approach:
+// 1. Check each overload signature
+// 2. Verify argument matches one
+// 3. Add overload if new type needed
+
+// ✓ Solution: Add new overload
+function process(value: string): void;
+function process(value: number): void;
+function process(value: boolean): void;  // ← New overload
+function process(value: string | number | boolean): void {
+  console.log(value);
+}
+
+process(true);  // ✅ Now works
+```
+
+---
+
+## 📚 Real-World Overloading Patterns
+
+### Pattern 1: HTML Element Query Selector
+
+```typescript
+/// Following real DOM API patterns
+interface Document {
+  querySelector<K extends keyof HTMLElementTagNameMap>(selector: K): HTMLElementTagNameMap[K] | null;
+  querySelector<K extends keyof SVGElementTagNameMap>(selector: K): SVGElementTagNameMap[K] | null;
+  querySelector(selector: string): Element | null;
+}
+
+// Usage is type-safe!
+const div = document.querySelector("div");     // HTMLDivElement | null
+const span = document.querySelector("span");   // HTMLSpanElement | null
+const any = document.querySelector("#id");     // Element | null
+```
+
+### Pattern 2: Filter Function Variants
+
+```typescript
+interface Collection<T> {
+  filter(predicate: (item: T) => boolean): Collection<T>;
+  filter<U extends T>(predicate: (item: T) => item is U): Collection<U>;
+}
+
+// Usage
+const items: (string | number)[] = [1, "two", 3];
+const strings = items.filter((x): x is string => typeof x === "string");
+// strings: string[] (narrowed type!)
+```
+
+### Pattern 3: Builder Pattern
+
+```typescript
+class WizardBuilder {
+  // Different overloads for step-wise building
+  build(): Wizard;
+  build(step: "name"): WizardBuilder;
+  build(step: "level"): WizardBuilder;
+  build(step?: "name" | "level"): WizardBuilder | Wizard {
+    if (!step) {
+      return new Wizard();
+    }
+    // Handle step
+    return this;
+  }
+}
+
+// Chain or build
+const wizard = new WizardBuilder()
+  .build("name")
+  .build("level")
+  .build();  // Returns complete Wizard
+```
+
+---
+
+## �🏆 Best Practices
 
 1. **Keep overloads simple** - if you need 5+ overloads, reconsider
 2. **Use Union types first** - overloading is for when unions won't work
