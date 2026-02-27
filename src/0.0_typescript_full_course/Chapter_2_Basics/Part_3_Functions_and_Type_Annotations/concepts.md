@@ -364,6 +364,171 @@ console.log(calculator.getValue());  // 10
 
 ---
 
+## 🎯 Understanding `this` Binding
+
+The `this` keyword behaves differently depending on how a function is called. This is a common source of confusion!
+
+### Traditional Functions: Dynamic `this`
+
+In traditional functions, `this` depends on **how the function is called**:
+
+```typescript
+class User {
+  name: string = "Alice";
+  
+  // Traditional function - this depends on caller
+  greetTraditional() {
+    console.log(`Hello, I'm ${this.name}`);
+  }
+}
+
+const user = new User();
+user.greetTraditional();  // ✅ "Hello, I'm Alice" (this = user)
+
+// But if you pass the method around:
+const method = user.greetTraditional;
+method();  // ❌ "Hello, I'm undefined" (this = undefined/global)
+
+// This is why arrow functions are often better!
+```
+
+### Arrow Functions: Lexical `this`
+
+Arrow functions capture `this` from their surrounding scope (lexical binding):
+
+```typescript
+class User {
+  name: string = "Alice";
+  
+  // Arrow function - this never changes
+  greetArrow = () => {
+    console.log(`Hello, I'm ${this.name}`);
+  };
+}
+
+const user = new User();
+user.greetArrow();  // ✅ "Hello, I'm Alice"
+
+// Even if passed around:
+const method = user.greetArrow;
+method();  // ✅ Still "Hello, I'm Alice"! (this is captured)
+```
+
+### Practical Impact: Event Handlers
+
+This difference matters in React and event handling:
+
+```typescript
+class Button {
+  state: string = "Click me";
+  
+  // ❌ PROBLEM - this is lost in event handler
+  onClickTraditional() {
+    this.state = "Clicked";  // this might be undefined!
+  }
+  
+  // ✅ SOLUTION - arrow function preserves this
+  onClickArrow = () => {
+    this.state = "Clicked";  // this is always the Button instance
+  };
+}
+
+// In React:
+<button onClick={button.onClickTraditional}>Wrong</button>
+<button onClick={button.onClickArrow}>Correct</button>
+```
+
+### Summary
+
+| Aspect | Traditional Function | Arrow Function |
+|--------|---------------------|-----------------|
+| **`this` binding** | Dynamic (call-site dependent) | Lexical (captured from scope) |
+| **Use as method** | Requires binding | Perfect |
+| **Use as callback** | Risky without binding | Safe |
+| **Conciseness** | More verbose | More concise |
+| **Use in classes** | Need `.bind()` or workarounds | Preferred |
+
+---
+
+## 🏷️ Function Types
+
+Functions themselves have types! You can assign function types to variables:
+
+### Function Type Syntax
+
+```typescript
+// Type for a function that takes two numbers and returns a number
+type Add = (a: number, b: number) => number;
+
+const add: Add = (x, y) => x + y;
+const subtract: Add = function(x, y) {
+  return x - y;
+};
+
+add(5, 3);          // 8
+subtract(10, 4);    // 6
+```
+
+### Function Types with Different Signatures
+
+```typescript
+// Function that returns nothing
+type Logger = (message: string) => void;
+
+const consolelog: Logger = (msg) => console.log(msg);
+const fileLog: Logger = (msg) => writeToFile(msg);
+
+// Function that takes no parameters
+type Generator = () => string;
+
+const greet: Generator = () => "Hello";
+
+// Function with complex parameters
+type Transform = (data: string[], options: { uppercase?: boolean }) => string[];
+
+const transform: Transform = (data, options) => {
+  return options.uppercase ? data.map(d => d.toUpperCase()) : data;
+};
+
+// Function that returns a function
+type Multiplier = (factor: number) => (x: number) => number;
+
+const makeMultiplier: Multiplier = (factor) => (x) => x * factor;
+const double = makeMultiplier(2);
+double(5);  // 10
+```
+
+### Function Types in Collections
+
+```typescript
+// Array of functions
+const handlers: Array<(event: string) => void> = [
+  (event) => console.log(event),
+  (event) => sendToServer(event),
+  (event) => updateUI(event)
+];
+
+// Run all handlers
+handlers.forEach(handler => handler("user clicked"));
+
+// Dictionary of functions
+type Operators = {
+  add: (a: number, b: number) => number;
+  subtract: (a: number, b: number) => number;
+  multiply: (a: number, b: number) => number;
+};
+
+const calculator: Operators = {
+  add: (a, b) => a + b,
+  subtract: (a, b) => a - b,
+  multiply: (a, b) => a * b
+};
+
+calculator.add(5, 3);  // 8
+```
+
+---
+
 ## 🎯 Real-World Examples
 
 ### E-Commerce: Calculate Discount
