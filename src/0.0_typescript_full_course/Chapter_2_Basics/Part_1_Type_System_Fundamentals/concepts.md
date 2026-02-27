@@ -1001,44 +1001,119 @@ function calculateTotal(items: CartItem[]): number {
 
 ---
 
-## 📏 Type System Mindset
+## � Type System Mindset: Mental Models
 
-### Mistake 1: Confusing null/undefined
+### Mental Model 1: Type = Contract
 
-```typescript
-// ❌ WRONG - null and undefined are different
-let value: null = undefined;  // ERROR
-
-// ✅ CORRECT - Use union if both needed
-let value: null | undefined = null;
-value = undefined;  // OK
-```
-
-### Mistake 2: Adding string to number
+Think of types as contracts between code parts:
 
 ```typescript
-// ❌ BAD - No implicit conversion
-const result = 5 + "10";  // ❌ ERROR: can't add number to string
-
-// ✅ GOOD - Explicit conversion
-const result = 5 + parseInt("10");  // 15
-const str = "Score: " + 5;          // "Score: 5"
-const str = `Score: ${5}`;          //  "Score: 5" (better)
-```
-
-### Mistake 3: Using any as escape hatch
-
-```typescript
-// ❌ BAD - Defeats TypeScript
-const data: any = fetchData();
-data.something.random.property.chain();  // Might crash!
-
-// ✅ GOOD - Type the data
-interface ApiData {
-  status: string;
-  results: any[];  // Preserve any only where truly needed
+// Without type
+function processData(data) {
+  return data.value + 10;
 }
-const data: ApiData = fetchData();
+
+// What is data? Unknown!
+// What type is value? Unknown!
+// Can I rely on this function?
+
+// With type
+function processData(data: { value: number }): number {
+  return data.value + 10;
+}
+
+// Type contract: "I will accept any object with a number 'value' property"
+// Returns: "I will always return a number"
+// This is a promise the function makes!
+```
+
+### Mental Model 2: Type = Whitelist
+
+Types define what's ALLOWED, not what's NOT allowed:
+
+```typescript
+// Type: string
+// ALLOWED: "", "a", "hello", "🚀", any valid JavaScript string
+// NOT ALLOWED: 5, null, undefined, [], {}, true
+
+// Type: number
+// ALLOWED: 0, 42, -1.5, NaN, Infinity
+// NOT ALLOWED: "5", null, undefined, "0x10", true
+
+// Type: string | number
+// ALLOWED: both strings AND numbers
+// NOT ALLOWED: null, undefined, [], {}, boolean
+
+// Think: "What values should this variable accept?"
+```
+
+### Mental Model 3: Type Narrowing = Refinement
+
+As you add checks, TypeScript refines what a value can be:
+
+```typescript
+function process(value: string | number | null) {
+  // value could be: string | number | null
+
+  if (!value) {
+    // value is: null (or falsy - only null is in union)
+    return;
+  }
+
+  // value is now: string | number (null eliminated)
+  
+  if (typeof value === "string") {
+    // value is now: string (number eliminated)
+    console.log(value.toUpperCase());  // Safe!
+  } else {
+    // value is now: number (string eliminated)
+    console.log(value.toFixed(2));     // Safe!
+  }
+}
+```
+
+---
+
+## 🔧 Practical Type System Usage
+
+### Pattern: Preventing Common Bugs
+
+```typescript
+// ❌ Without types - Bug!
+function calculateDiscount(price, discount) {
+  return price * discount;
+}
+
+calculateDiscount(100, 0.2);   // 20 ✓
+calculateDiscount("100", 20);  // "10010010010010010010" Bug!
+calculateDiscount(100);        // NaN Bug!
+
+// ✅ With types - Bugs prevented!
+function calculateDiscount(price: number, discount: number): number {
+  return price * discount;
+}
+
+calculateDiscount(100, 0.2);   // ✓ 20
+calculateDiscount("100", 20);  // ❌ ERROR: can't pass string
+calculateDiscount(100);        // ❌ ERROR: missing discount
+```
+
+### Pattern: Self-Documenting Code
+
+```typescript
+// ❌ Hard to understand what this does
+function process(x, y, z) {
+  return x ? y(z) : z;
+}
+
+// ✅ Types make intent clear
+function processValue(
+  condition: boolean,
+  transform: (value: string) => string,
+  defaultValue: string
+): string {
+  return condition ? transform(defaultValue) : defaultValue;
+}
 ```
 
 ---
