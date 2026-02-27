@@ -708,6 +708,89 @@ function sum(...numbers: number[]): number {
 6. **Keep functions focused** - one responsibility
 7. **Use defaults wisely** - simpler than optional parameters
 8. **Destructure object parameters** - cleaner code
+9. **Use arrow functions in classes** - preserves `this` binding
+10. **Prefer function types for callbacks** - clear contracts
+
+---
+
+## 📚 Function Composition Patterns
+
+**Function composition** means combining functions to create new functionality:
+
+### Simple Composition
+
+```typescript
+// Individual functions
+function double(x: number): number {
+  return x * 2;
+}
+
+function addTen(x: number): number {
+  return x + 10;
+}
+
+// Manual composition
+function compose(x: number): number {
+  return addTen(double(x));
+}
+
+console.log(compose(5));  // addTen(double(5)) = addTen(10) = 20
+
+// Reusable composer
+function composeTwo<T>(
+  f: (x: T) => T,
+  g: (x: T) => T
+): (x: T) => T {
+  return (x: T) => g(f(x));
+}
+
+const doubleAndAddTen = composeTwo(double, addTen);
+console.log(doubleAndAddTen(5));  // 20
+```
+
+### Pipeline Pattern
+
+```typescript
+// Process data through a series of functions
+type Pipeline<T> = (value: T) => T;
+
+function createPipeline<T>(functions: Pipeline<T>[]): Pipeline<T> {
+  return (value: T): T => {
+    return functions.reduce((acc, fn) => fn(acc), value);
+  };
+}
+
+// Usage
+interface User {
+  name: string;
+  email: string;
+  age: number;
+}
+
+const validateUser: Pipeline<User | null> = (user) => {
+  if (!user || !user.email) return null;
+  return user;
+};
+
+const normalizeEmail: Pipeline<User | null> = (user) => {
+  if (!user) return null;
+  return { ...user, email: user.email.toLowerCase() };
+};
+
+const filterMinors: Pipeline<User | null> = (user) => {
+  if (!user || user.age < 18) return null;
+  return user;
+};
+
+const userPipeline = createPipeline([
+  validateUser,
+  normalizeEmail,
+  filterMinors
+]);
+
+const result = userPipeline({ name: "Alice", email: "ALICE@EXAMPLE.COM", age: 25 });
+// Returns valid user with lowercase email
+```
 
 ---
 
