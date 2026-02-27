@@ -3,12 +3,14 @@
 ## 🎯 Learning Objectives
 
 After this part, you'll understand:
-- How TypeScript infers types automatically
-- Type widening and narrowing concepts
-- When to rely on inference vs explicit types
-- Literal types and `as const`
-- Real-world inference patterns
-- Best practices for inference
+- How TypeScript infers types automatically from values
+- Type widening and narrowing concepts in depth
+- When to rely on inference vs explicit types (trade-offs)
+- Literal types and `as const` for precise typing
+- Real-world inference patterns in APIs and configs
+- Best practices for balancing inference with clarity
+- Control flow analysis and type guards
+- Advanced patterns like `typeof`, `ReturnType`, and `Parameters`
 
 ---
 

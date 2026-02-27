@@ -3,12 +3,14 @@
 ## 🎯 Learning Objectives
 
 After this part, you'll understand:
-- Union types (OR logic) and when to use them
-- Intersection types (AND logic) and combining types
-- Type guards and type narrowing
-- Discriminated unions for safe data handling
-- Real-world patterns in API responses and component props
-- Common pitfalls and how to avoid them
+- Union types (OR logic) and practical applications
+- Intersection types (AND logic) and composition patterns
+- Type guards and exhaustive type narrowing
+- Discriminated unions for safe, predictable handling
+- Real-world patterns: API responses, form states, component props
+- Common pitfalls: lost types, ambiguous unions
+- When to use unions vs intersections vs separate types
+- Advanced narrowing with control flow analysis
 
 ---
 
