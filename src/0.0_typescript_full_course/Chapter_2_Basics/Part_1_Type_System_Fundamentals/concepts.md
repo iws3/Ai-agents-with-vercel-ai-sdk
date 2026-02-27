@@ -389,7 +389,7 @@ if (userInput.length > 0) {
 
 ### Null and Undefined
 
-Represent absence of value:
+Represent absence of value - but they're different and handled differently.
 
 ```typescript
 // Null - explicitly no value
@@ -413,8 +413,137 @@ maybeNumber = null;      // ❌ ERROR (with strict mode)
 ```
 
 **Difference:**
-- `null` = explicit "nothing"
-- `undefined` = not initialized or missing
+
+| Aspect | null | undefined |
+|--------|------|-----------|
+| **Meaning** | Explicitly chose no value | Never assigned a value |
+| **Cause** | You set it to `null` | Variable declared but not initialized |
+| **In Functions** | Return to mean "no result" | Missing function parameters |
+| **In Objects** | Optional property not set | Not applicable |
+| **Usage** | More intentional | More accidental |
+
+**When undefined occurs automatically:**
+```typescript
+// Uninitialized variables
+let declared: any;  // undefined until assigned
+console.log(declared);  // undefined
+
+// Function returns nothing
+function doSomething(): void {
+  console.log("Done");
+  // Implicitly returns undefined
+}
+
+// Missing function arguments
+function greet(name: string): void {
+  console.log(name);  // The name parameter exists
+}
+
+function describe(value: unknown = undefined): void {
+  // value defaults to undefined if not provided
+}
+
+describe();  // value is undefined
+describe("test");  // value is "test"
+
+// Array with holes
+const sparse = [1, , 3];  // Middle element is undefined
+console.log(sparse[1]);  // undefined
+
+// Accessing non-existent property
+const obj = { name: "Alice" };
+console.log(obj.age);  // undefined (property doesn't exist)
+```
+
+**Handling nullable values:**
+```typescript
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  phone: string | null;      // Phone might not exist
+  bio: string | undefined;   // Bio not provided yet
+}
+
+const user: User = {
+  id: 1,
+  name: "Alice",
+  email: "alice@example.com",
+  phone: null,  // Explicitly no phone
+  // bio is undefined (missing)
+};
+
+// Checking for null/undefined
+if (user.phone === null) {
+  console.log("No phone provided");
+}
+
+if (user.bio === undefined) {
+  console.log("Bio not filled in");
+}
+
+// Combining check for both
+if (!user.phone) {  // Works for null (but also 0, "", false!)
+  console.log("No phone");
+}
+
+// Better: explicit checks
+if (user.phone == null) {  // Matches both null and undefined
+  console.log("No phone");
+}
+
+// Best: specific checks
+if (user.phone === null) {
+  console.log("Phone explicitly not set");
+}
+
+if (user.bio === undefined) {
+  console.log("Bio not yet provided");
+}
+```
+
+**Modern TypeScript: Optional chaining and Nullish coalescing:**
+```typescript
+interface Profile {
+  user: { name: string } | null;
+}
+
+const profile: Profile = { user: null };
+
+// Old way - verbose null checks
+if (profile && profile.user && profile.user.name) {
+  console.log(profile.user.name);
+}
+
+// Modern way - optional chaining
+console.log(profile?.user?.name);  // Safely accesses, returns undefined if null
+
+// Providing default if null/undefined
+const name = profile?.user?.name ?? "Anonymous";  // Nullish coalescing
+console.log(name);  // "Anonymous"
+
+// Difference between ?? and ||
+const count = 0;
+console.log(count || 10);   // 10 (0 is falsy)
+console.log(count ?? 10);   // 0 (0 is not null/undefined)
+```
+
+**Best practice: Use null over undefined**
+```typescript
+// ✅ PREFERRED - Use null for explicit absence
+interface Product {
+  id: number;
+  name: string;
+  discount: number | null;  // No discount = null
+}
+
+// ❌ AVOID - Using undefined for explicit absence
+interface Product {
+  id: number;
+  name: string;
+  discount?: number;  // Confuses optional with missing
+}
+```
 
 ---
 
