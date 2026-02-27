@@ -90,7 +90,7 @@ Primitive types are the basic building blocks:
 
 ### String Type
 
-Any text value:
+Any text value. Use for names, messages, URLs, emails, any human-readable text.
 
 ```typescript
 let name: string = "Alice";
@@ -103,7 +103,61 @@ name = 42;  // ❌ ERROR: Cannot assign number to string
 **String features:**
 - Double quotes: `"hello"`
 - Single quotes: `'hello'`
-- Template literals: `` `hello ${var}` ``
+- Template literals: `` `hello ${var}` `` - allows expressions inside
+
+**Why strings matter:**
+- Store user data (names, emails, addresses)
+- Display messages and UI text
+- Communicate with APIs and databases
+- Process text data
+
+**String operations:**
+```typescript
+const str: string = "TypeScript";
+
+// Getting information
+console.log(str.length);           // 10
+console.log(str[0]);              // "T"
+console.log(str.charAt(1));        // "y"
+
+// Transformations
+console.log(str.toUpperCase());    // "TYPESCRIPT"
+console.log(str.toLowerCase());    // "typescript"
+console.log(str.substring(0, 4));  // "Type"
+console.log(str.replace("Type", "Java"));  // "JavaScript"
+
+// Searching
+console.log(str.includes("Script"));  // true
+console.log(str.startsWith("Type"));   // true
+console.log(str.endsWith("Script"));   // true
+console.log(str.indexOf("S"));         // 4
+
+// Creating new strings
+const words = str.split("");       // ["T", "y", "p", "e", "S", "c", "r", "i", "p", "t"]
+const joined = words.join("-");    // "T-y-p-e-S-c-r-i-p-t"
+```
+
+**Common gotcha - Strings are immutable:**
+```typescript
+let text: string = "Hello";
+text[0] = "h";  // ❌ Looks like it should work, but doesn't!
+// text is still "Hello" - you can't change individual characters
+// Instead, reassign:
+text = "h" + text.substring(1);  // "hello" - creates new string
+```
+
+**Template literals vs concatenation:**
+```typescript
+const name = "Alice";
+const age = 30;
+
+// Old way - easy to mess up
+const sentence1 = "My name is " + name + " and I'm " + age + " years old.";
+
+// Modern way - clearer and safer
+const sentence2 = `My name is ${name} and I'm ${age} years old.`;
+// Both produce same output, but template literal is more readable
+```
 
 ### Number Type
 
