@@ -563,7 +563,74 @@ interface ChatConfig {
 
 ---
 
-## 🏆 Best Practices
+## � Decision Matrix: Type vs Interface
+
+| Need | Type | Interface |
+|------|------|-----------|
+| **Object shape contract** | Possible | ✓ Better |
+| **Union of types** | ✓ Perfect | Not directly |
+| **Function signature** | ✓ Better | Possible but verbose |
+| **Extend other types** | Intersection ✓ | Inheritance ✓ |
+| **Declare merging** | Never | ✓ Only option |
+| **Primitive aliases** | ✓ Only option | Never |
+| **Conditional types** | ✓ Only option | Never |
+| **Mapped types** | ✓ Only option | Never |
+
+### Examples for Each Scenario
+
+```typescript
+// Scenario 1: Simple object contract
+// ✓ Interface better
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+// Scenario 2: Function type
+// ✓ Type better
+type Validator = (value: unknown) => boolean;
+
+// Scenario 3: Extending an object
+// Both work equally well
+interface Admin extends User {
+  permissions: string[];
+}
+
+type AdminType = User & { permissions: string[] };
+
+// Scenario 4: Complex union
+// ✓ Type better (Interface can't do this directly)
+type ApiResponse = 
+  | { status: "success"; data: unknown }
+  | { status: "error"; message: string }
+  | { status: "pending" };
+
+// Scenario 5: Primitive alias
+// ✓ Type only option
+type Email = string;
+type UserId = number;
+
+// Scenario 6: Conditional type
+// ✓ Type only option
+type IsString<T> = T extends string ? true : false;
+
+// Scenario 7: Declaration merging (extend globals)
+// ✓ Interface only option
+interface Window {
+  myCustomProperty: string;
+}
+
+// Scenario 8: Mapped types
+// ✓ Type only option
+type Readonly<T> = {
+  readonly [K in keyof T]: T[K];
+};
+```
+
+---
+
+## �🏆 Best Practices
 
 1. **Default to Interface** for object contracts - it's more semantic
 2. **Use Type Aliases** for unions, function types, and complex mappings
