@@ -449,6 +449,89 @@ const service: FullService = {
 
 ---
 
+## 🎯 Type Narrowing Strategies
+
+### Exhaustion Strategy
+
+Narrow a union so TypeScript can verify you've handled all cases:
+
+```typescript
+type Result = 
+  | { status: "success"; data: string }
+  | { status: "error"; error: string }
+  | { status: "pending" };
+
+function handleResult(result: Result): void {
+  if (result.status === "success") {
+    console.log(result.data);
+  } else if (result.status === "error") {
+    console.log(result.error);
+  } else if (result.status === "pending") {
+    console.log("Loading...");
+  }
+  // ✅ All cases covered - TypeScript is happy!
+}
+```
+
+### Never Type for Exhaustiveness
+
+Use `never` to force handling all cases:
+
+```typescript
+function exhaustiveCheck(status: never): never {
+  throw new Error(`Unexpected status: ${status}`);
+}
+
+function processStatus(status: "success" | "error" | "pending"): void {
+  if (status === "success") {
+    console.log("Ok");
+  } else if (status === "error") {
+    console.log("Failed");
+  } else {
+    exhaustiveCheck(status);  // If new status added to union, TypeScript errors!
+  }
+}
+```
+
+### Custom Type Guards
+
+Create reusable narrowing functions:
+
+```typescript
+interface User {
+  type: "user";
+  name: string;
+  email: string;
+}
+
+interface Bot {
+  type: "bot";
+  name: string;
+  version: string;
+}
+
+type Account = User | Bot;
+
+// Type guard function
+function isUser(account: Account): account is User {
+  return account.type === "user";
+}
+
+function isBot(account: Account): account is Bot {
+  return account.type === "bot";
+}
+
+const account: Account = { type: "user", name: "Alice", email: "alice@example.com" };
+
+if (isUser(account)) {
+  console.log(account.email);  // ✅ Narrowed to User
+} else if (isBot(account)) {
+  console.log(account.version);  // ✅ Narrowed to Bot
+}
+```
+
+---
+
 ## ✅ Checklist
 
 - [ ] Understand union types `A | B`
