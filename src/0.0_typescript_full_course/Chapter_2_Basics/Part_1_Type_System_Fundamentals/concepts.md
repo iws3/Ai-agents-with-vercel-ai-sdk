@@ -257,7 +257,7 @@ const cents = Math.round(dollars * 100);  // 1999 (no decimals)
 
 ### Boolean Type
 
-True or false only:
+True or false only. Use for flags, switches, conditional logic, feature toggles.
 
 ```typescript
 let isActive: boolean = true;
@@ -271,10 +271,121 @@ if (isActive) {
   console.log("Active");
 }
 
-const can Vote = age >= 18;  // boolean
+const canVote = age >= 18;  // boolean
 ```
 
 **Important**: TypeScript treats booleans strictly. Truthy/falsy values from JavaScript don't automatically convert.
+
+**Boolean logic (AND, OR, NOT):**
+```typescript
+const isLoggedIn: boolean = true;
+const isAdmin: boolean = false;
+const hasPermission: boolean = true;
+
+// AND (&&) - both must be true
+if (isLoggedIn && hasPermission) {
+  console.log("Access granted");  // logs this
+}
+
+if (isLoggedIn && isAdmin) {
+  console.log("Admin access");     // doesn't log (isAdmin is false)
+}
+
+// OR (||) - at least one must be true
+if (isAdmin || hasPermission) {
+  console.log("Some access granted");  // logs this
+}
+
+// NOT (!) - reverses the value
+if (!hasError) {
+  console.log("No error");  // if hasError is false, this logs
+}
+
+// Complex conditions
+if ((isLoggedIn && hasPermission) || isAdmin) {
+  console.log("Allowed");
+}
+```
+
+**Boolean operations return booleans:**
+```typescript
+// Comparison operators return booleans
+const age: number = 25;
+console.log(age > 18);          // true
+console.log(age === 25);        // true (exact equality)
+console.log(age === "25");      // false (type mismatch)
+console.log(age == "25");       // true (loose equality - AVOID!)
+console.log(age !== 30);        // true (not equal)
+console.log(age < 50);          // true (less than)
+
+// String comparison
+const name: string = "Alice";
+console.log(name.includes("li"));    // true
+console.log(name.startsWith("Al"));  // true
+console.log(name === "alice");       // false (case-sensitive!)
+console.log(name.toLowerCase() === "alice");  // true (convert first)
+
+// Array operations return booleans
+const items: number[] = [1, 2, 3];
+console.log(items.includes(2));      // true
+console.log(items.some(x => x > 5)); // false
+console.log(items.every(x => x > 0)); // true
+```
+
+**Practical use cases:**
+```typescript
+// Feature toggles
+const isDevelopment: boolean = process.env.NODE_ENV === "development";
+const isDebugMode: boolean = isDevelopment;
+
+// State flags
+interface UserState {
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  hasError: boolean;
+  errorMessage: string | null;
+}
+
+// Validation
+function isValidEmail(email: string): boolean {
+  return email.includes("@") && email.includes(".");
+}
+
+function isAdult(age: number): boolean {
+  return age >= 18;
+}
+
+function canPurchase(age: number, hasPaymentMethod: boolean): boolean {
+  return isAdult(age) && hasPaymentMethod;
+}
+```
+
+**Why not use truthy/falsy in TypeScript:**
+```typescript
+// ❌ WRONG - Treating number as boolean
+const count: number = 0;
+if (count) {
+  // This doesn't execute because 0 is falsy
+  console.log("Count is ready");
+}
+
+// ✅ CORRECT - Explicit boolean check
+if (count > 0) {
+  console.log("Count is ready");
+}
+
+// ❌ WRONG - Empty string is falsy
+const userInput: string = "";
+if (userInput) {
+  // Doesn't execute for empty string
+  console.log("Has input");
+}
+
+// ✅ CORRECT - Explicit check
+if (userInput.length > 0) {
+  console.log("Has input");
+}
+```
 
 ### Null and Undefined
 
