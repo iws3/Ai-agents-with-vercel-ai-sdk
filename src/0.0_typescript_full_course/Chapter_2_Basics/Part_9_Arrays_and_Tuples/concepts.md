@@ -3,13 +3,14 @@
 ## 🎯 Learning Objectives
 
 After this part, you'll understand:
-- TypeScript typed arrays and their capabilities
-- Tuples and when to use them
-- Readonly arrays and mutability
+- TypeScript typed arrays comprehensively
+- Tuples for fixed structures vs arrays for collections
+- Readonly arrays and mutation prevention
 - Optional and rest elements in tuples
-- Array methods and type inference
-- Real-world applications in data processing
-- Modern array patterns and best practices
+- Array methods with full type inference
+- Real-world applications: data pipelines, CSV parsing
+- Modern array patterns: const assertions, labeled tuples
+- Performance considerations and best practices
 
 ---
 

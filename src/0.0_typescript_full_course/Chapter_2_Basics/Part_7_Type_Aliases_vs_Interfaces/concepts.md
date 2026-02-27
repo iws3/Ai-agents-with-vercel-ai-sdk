@@ -3,12 +3,14 @@
 ## 🎯 Learning Objectives
 
 After this part, you'll understand:
-- What type aliases are and their capabilities
-- What interfaces are and their strengths
+- What type aliases are and their full capabilities
+- What interfaces are and their unique strengths
 - Key differences between type aliases and interfaces
 - Decision criteria for choosing one over the other
-- Advanced features like declaration merging and extending
-- Real-world patterns and best practices
+- Advanced features: declaration merging, extending, intersection
+- Real-world patterns and team best practices
+- Performance implications and tooling support
+- When to use each in modern TypeScript
 
 ---
 

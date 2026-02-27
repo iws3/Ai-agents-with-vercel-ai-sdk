@@ -4,11 +4,13 @@
 
 After this part, you'll understand:
 - What function overloading is and why it matters
-- How to declare overload signatures
-- How to implement functions with multiple signatures
-- Real-world patterns and use cases
-- When overloading is better than alternatives
-- Common pitfalls and best practices
+- How to declare precise overload signatures
+- How to implement functions handling multiple signatures
+- Real-world patterns: API methods, utility functions
+- When overloading is better than unions
+- Common pitfalls and debugging overload conflicts
+- Modern alternatives to overloading
+- Best practices for maintainable overloaded functions
 
 ---
 

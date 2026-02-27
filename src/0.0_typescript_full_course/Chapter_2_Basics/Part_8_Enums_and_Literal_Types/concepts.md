@@ -3,12 +3,14 @@
 ## 🎯 Learning Objectives
 
 After this part, you'll understand:
-- What enums are and when to use them
+- What enums are and their use cases
 - String enums vs numeric enums vs heterogeneous enums
-- Literal types and when they're better than enums
-- Enums in real-world applications
-- Common pitfalls and anti-patterns
-- Modern best practices
+- Literal types and when they're better than enums (usually!)
+- Enums in real-world applications and APIs
+- Common pitfalls: reverse mapping, runtime behavior
+- Modern best practices: prefer literal unions over enums
+- Const assertions and discriminated unions
+- Performance and tree-shaking implications
 
 ---
 
