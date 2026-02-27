@@ -546,7 +546,234 @@ let status = "pending";
 
 ---
 
-## 📚 Resources
+## � Closures and Variable Capture
+
+A **closure** is when a function remembers variables from its outer scope.
+
+### Basic Closure Example
+
+```typescript
+function createCounter() {
+  let count = 0;  // Private to closure
+  
+  return function() {
+    count++;  // Accesses outer scope variable
+    return count;
+  };
+}
+
+const counter = createCounter();
+console.log(counter());  // 1
+console.log(counter());  // 2
+console.log(counter());  // 3
+// The count variable "persists" between calls!
+```
+
+### Closure with let vs var
+
+```typescript
+// With let - Each iteration has its own i
+const functions_let = [];
+for (let i = 0; i < 3; i++) {
+  functions_let.push(() => i);
+}
+
+console.log(functions_let[0]());  // 0 (captures first i)
+console.log(functions_let[1]());  // 1 (captures second i)
+console.log(functions_let[2]());  // 2 (captures third i)
+
+// With var - All share the same i
+const functions_var = [];
+for (var i = 0; i < 3; i++) {
+  functions_var.push(() => i);
+}
+
+console.log(functions_var[0]());  // 3 (all capture same i=3)
+console.log(functions_var[1]());  // 3 (all capture same i=3)
+console.log(functions_var[2]());  // 3 (all capture same i=3)
+
+// This is why let is preferred in loops!
+```
+
+### Practical Closure: Factory Pattern
+
+```typescript
+interface Logger {
+  log(message: string): void;
+  name: string;
+}
+
+function createLogger(name: string): Logger {
+  const timestamp = new Date().toISOString();  // Captured once at creation
+  
+  return {
+    name,
+    log(message: string) {
+      // Accesses 'name' and 'timestamp' from closure
+      console.log(`[${name} - ${timestamp}] ${message}`);
+    }
+  };
+}
+
+const appLogger = createLogger("App");
+const authLogger = createLogger("Auth");
+
+appLogger.log("Started");  // [App - 2024-01-01T...] Started
+authLogger.log("Login");   // [Auth - 2024-01-01T...] Login
+// Each logger has its own closure with different values
+```
+
+### Memory Implications
+
+Closures keep variables in memory forever (until function is garbage collected):
+
+```typescript
+function createExpensiveData() {
+  // This large object stays in memory as long as callback exists
+  const largeData = new Array(1000000).fill("data");
+  
+  return function() {
+    return largeData.length;  // Closure holds reference to largeData
+  };
+}
+
+const callback = createExpensiveData();
+// largeData: 1000000 items still in memory
+// Even after createExpensiveData() returns
+
+callback = null;  // Now largeData can be garbage collected
+```
+
+---
+
+## 💾 Memory and Performance
+
+### const vs let Performance
+
+In modern JavaScript engines, there's **no meaningful performance difference** between `const` and `let`. The engine optimizes both well:
+
+```typescript
+// No performance difference
+const x = 1;
+let y = 1;
+
+// Engine optimizes both the same way
+```
+
+**However**, using `const` has benefits:
+
+1. **Intent clarity**: Shows variable won't change
+2. **Optimization hints**: Engine might optimize slightly better (immutable = safer)
+3. **Prevents bugs**: Can't accidentally reassign
+4. **Debugging**: Variable changes are intentional, easier to track
+
+### Variable Scope and Memory
+
+Variables in closure scope persist until no references exist:
+
+```typescript
+function demo() {
+  const large = new Array(1000000);  // Allocate 1MB
+  
+  if (condition) {
+    const small = "data";  // Small string
+    // Both large and small in scope here
+  }
+  // small out of scope here, can be garbage collected
+  
+  return function() {
+    console.log(large);  // large still needed, can't be freed
+  };
+}
+```
+
+**Best Practice:** Keep variable scope as narrow as possible to allow garbage collection:
+
+```typescript
+// ❌ BAD - items stays in memory even after loop
+function processItems(items: any[]) {
+  let result = [];
+  
+  for (let i = 0; i < items.length; i++) {
+    result.push(items[i] * 2);
+  }
+  
+  return result;
+}
+
+// ✅ GOOD - items could be garbage collected sooner
+function processItems(items: any[]) {
+  return items.map(item => item * 2);
+}
+```
+
+### Variable Naming and Performance
+
+Variable naming has no performance impact, but affects readability:
+
+```typescript
+// ❌ Bad names (confusing)
+const d = 5;
+const u = "user@example.com";
+const p = true;
+
+// ✅ Good names (clear intent)
+const delay = 5;
+const userEmail = "user@example.com";
+const isAuthenticated = true;
+```
+
+---
+
+## 🎯 Variable Naming Conventions
+
+TypeScript community follows common naming conventions:
+
+```typescript
+// ✅ Variables and functions: camelCase
+const userName = "Alice";
+const userData = { name: "Alice", age: 30 };
+
+function processUserData() {
+  // code
+}
+
+// ✅ Constants: UPPER_SNAKE_CASE
+const MAX_RETRIES = 3;
+const API_URL = "https://api.example.com";
+const TIMEOUT_MS = 5000;
+
+// ✅ Classes: PascalCase
+class UserService {
+  // code
+}
+
+class ErrorHandler {
+  // code
+}
+
+// ✅ Interfaces and Types: PascalCase
+interface User {
+  id: number;
+  name: string;
+}
+
+type Status = "pending" | "complete" | "error";
+
+// ✅ Private variables (convention): _leadingUnderscore
+class Logger {
+  private _logs: string[] = [];  // Indicates private
+  public log(message: string) {
+    // code
+  }
+}
+```
+
+**Consistency Over Perfection:** Pick conventions and stick with them throughout your codebase!
+
+---
+
+## �📚 Resources
 
 - [const vs let vs var (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)
 - [JavaScript Scope](https://developer.mozilla.org/en-US/docs/Glossary/Scope)
