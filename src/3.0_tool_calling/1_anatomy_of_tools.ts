@@ -24,3 +24,25 @@ const weatherTool=tool({
         }
     }
 })
+
+// HOW TOOL WITH GENERATE TEXT:
+// When you provide tools to generateText, something interesting happens during execution. The AI processes your prompt and decides it needs weather information. It doesn't just generate text saying "I don't know". Instead, it generates a tool call specifying which tool to use and what parameters to pass. The SDK sees this tool call, finds your execute function, runs it with the provided parameters, and sends the result back to the AI. The AI then generates its final response incorporating the real weather data.
+
+async function askAboutWeather(){
+    const result=await generateText({
+        model:model,
+        tools: {
+            getWeather:weatherTool
+        },
+        prompt: 'what is the weather in Douala-Cameroon right now?'
+    })
+}
+
+// TOOL 2: SEARCH for restaurants
+
+const searchRestaurantsTool=tool({
+    description:"Search for restaurant in a given location",
+    parameters:z.object({
+        location:z.string().describe('')
+    })
+})
