@@ -195,6 +195,81 @@ let y = 2;  // ❌ ERROR: already declared (catches mistake!)
 
 ---
 
+## ⏳ Understanding the Temporal Dead Zone
+
+The **Temporal Dead Zone (TDZ)** is a unique JavaScript feature where variables declared with `let` and `const` cannot be accessed before their declaration. This is different from `var` (which has hoisting).
+
+### How It Works
+
+Variables are created in two phases:
+
+1. **Hoisting Phase**: JavaScript scans the code and "reserves" the variable
+2. **Initialization Phase**: The variable is assigned a value
+
+**With `var`:** Hoisted variables are *initialized* to `undefined`
+**With `let`/`const`:** Hoisted variables are *not initialized* (TDZ!)
+
+```typescript
+// TDZ starts here
+console.log(x);  // ❌ ERROR: ReferenceError
+let x = 5;       // TDZ ends here, x is initialized
+console.log(x);  // ✅ OK: 5
+```
+
+### Real-World Examples of TDZ Issues
+
+```typescript
+// ❌ COMMON MISTAKE - Using variable before it's declared
+function processData(data: any) {
+  if (data.id) {
+    console.log(result);  // ❌ ERROR: result is in TDZ!
+  }
+  let result = "processed";  // TDZ ends here
+}
+
+// ✅ CORRECT - Declare at start
+function processData(data: any) {
+  let result: string;  // TDZ ends here (even without value)
+  
+  if (data.id) {
+    console.log(result);  // ✅ OK - declared, might be undefined
+  }
+  result = "processed";
+}
+```
+
+### TDZ with Loops
+
+```typescript
+// ❌ Loop variable is in TDZ until declaration
+for (let i = 0; i < 3; i++) {
+  setTimeout(() => {
+    // When callback runs, i is captured
+    // TDZ is already past - i is accessible
+    console.log(i);  // ✅ Works: 0, 1, 2
+  }, 100);
+}
+
+// Compare with var (no TDZ)
+for (var j = 0; j < 3; j++) {
+  setTimeout(() => {
+    console.log(j);  // All print: 2, 2, 2 (due to var hoisting)
+  }, 100);
+}
+```
+
+### Why TDZ Exists
+
+**Benefits:**
+- ✅ Prevents accidental use of undefined variables
+- ✅ Forces declaration before use
+- ✅ Makes bugs obvious immediately
+- ✅ Encourages good coding practices
+
+**Analogy:** Like reserving seats at a theater - the seat exists (hoisted) but you can't sit in it until it's properly set up (initialized).
+
+---
+
 ## 📍 Scope: Where Variables Exist
 
 Scope defines visibility and lifetime of variables:
