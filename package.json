@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "ansi": "tsc && nodemon dist/7.0_terminal_engineering/1.3_clear_screen.js"
+    "ansi": "tsc && nodemon dist/7.0_terminal_engineering/1.6_spinners.js"
     
   },
   "keywords": [],
