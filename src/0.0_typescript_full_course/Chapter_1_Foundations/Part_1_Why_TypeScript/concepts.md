@@ -1,6 +1,6 @@
 # Part 1: Why TypeScript? â€” Comprehensive Deep Dive
 
-## í¾¯ Learning Objectives
+## ï¿½ï¿½ï¿½ Learning Objectives
 
 After this part, you'll understand:
 - What TypeScript is and how it relates to JavaScript
@@ -9,7 +9,7 @@ After this part, you'll understand:
 - Real-world scenarios in AI engineering and frontend development
 - Why major companies (Google, Netflix, Uber) use TypeScript
 
-## í¿·ï¸ Key Terms
+## ï¿½ï¿½ï¿½ï¸ Key Terms
 
 - **TypeScript**: Superset of JavaScript adding optional static typing
 - **Type Checking**: Verifying operations are valid BEFORE code runs
@@ -17,7 +17,7 @@ After this part, you'll understand:
 - **Type Inference**: Automatic type detection without explicit annotations
 - **Transpilation**: Converting TypeScript to JavaScript for browsers
 
-> **Beginner Note** í¾“: TypeScript is "JavaScript with guardrails". It catches bugs BEFORE users see them.
+> **Beginner Note** ï¿½ï¿½ï¿½: TypeScript is "JavaScript with guardrails". It catches bugs BEFORE users see them.
 
 ---
 
@@ -120,7 +120,7 @@ const post: BlogPost = { /* ... */ };
 - "Go to definition" jumps to source
 - "Find all references" shows everywhere a symbol is used  
 - Refactoring tools safely rename across the codebase
-
+P
 ### 4. Scaling Code Effectively
 
 Large projects (100k+ lines) become manageable:
@@ -178,7 +178,7 @@ New team members understand instantly. No guess work.
 
 ---
 
-## í²¡ Real-World Applications
+## ï¿½ï¿½ï¿½ Real-World Applications
 
 ### AI Engineering: LLM Safety
 
@@ -298,7 +298,7 @@ function greet(name) { return "Hello, " + name + "!"; }
 
 ---
 
-## í³Š Industry Adoption
+## ï¿½ï¿½ï¿½ Industry Adoption
 
 - **39% of developers** use TypeScript (Stack Overflow 2023)
 - **60%+ of npm packages** published with TypeScript support
@@ -308,7 +308,7 @@ function greet(name) { return "Hello, " + name + "!"; }
 
 ---
 
-## í³š Resources
+## ï¿½ï¿½ï¿½ Resources
 
 - [TypeScript Official Docs](https://www.typescriptlang.org/docs/)
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/)

@@ -79,7 +79,7 @@ async function askAboutWeather() {
       console.log("   Result:", toolResults.output);
     });
   }
-// for multipsteps, inspect steps
+// for multipsteps, inspect steps  here:
 if(result.steps && result.steps.length >0){
     console.log("\nSteps taken:");;
     result.steps.map((step, index)=>{
